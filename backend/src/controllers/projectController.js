@@ -132,21 +132,3 @@ export const deleteProject = async (req, res) => {
     });
   }
 };
-
-export const uploadResume = async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({ message: "No resume file uploaded" });
-    }
-
-    return res.status(200).json({
-      message: "Resume uploaded successfully",
-      file: req.file.filename,
-    });
-  } catch (error) {
-    return res.status(500).json({
-      message: "Resume upload failed",
-      error: error.message,
-    });
-  }
-};

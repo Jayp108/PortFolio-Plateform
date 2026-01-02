@@ -19,13 +19,40 @@ const app = express();
 connectDB();
 
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL,
-    // origin:"https://portfolio-platform.vercel.app",
-    credentials: true,
-  })
-);
+
+const allowedOrigins = [
+  process.env.CLIENT_URL,        // Vercel frontend
+  "http://localhost:5173"        // local dev
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // allow Postman / server-to-server
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("CORS not allowed"));
+    }
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
+
+// 🔥 VERY IMPORTANT (preflight fix)
+app.options("*", cors());
+
+
+
+// app.use(
+//   cors({
+//     origin: process.env.CLIENT_URL,
+//     // origin:"https://portfolio-platform.vercel.app",
+//     credentials: true,
+//   })
+// );
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
