@@ -20,7 +20,14 @@ connectDB();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL,
+    origin: [
+      "http://localhost:5173",
+      "https://portfolio-platform.vercel.app"
+    ],
+
+    // origin: process.env.CLIENT_URL,
+    // origin:"https://portfolio-platform.vercel.app",
+
     credentials: true,
   })
 );
